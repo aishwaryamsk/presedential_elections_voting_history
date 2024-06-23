@@ -179,14 +179,15 @@ function getMaxVoteCandidate(candInfo) {
 
 function plotMap(us) {
     let titleHt = document.getElementById('title').offsetHeight;
-    d3.select('#candInfo').attr('height', (window.innerHeight - titleHt) * 0.35);
+    let availableHt = window.innerHeight - titleHt;
+
+    d3.select('#candInfo').attr('height', availableHt * 0.39).attr('width', window.innerWidth / 2);
 
     const features = topojson.feature(us, us.objects.states).features;
     const margin = { top: 0, right: 10, bottom: 0, left: 10 },
-        //width = (window.innerWidth / 2) - margin.left - margin.right,
-        width = 700,
+        width = 480,
         //height = window.innerHeight;
-        height = ((window.innerHeight - titleHt) * 0.6) - margin.top - margin.bottom;
+        height = (availableHt * 0.61) - margin.top - margin.bottom;
 
     const mapSVG = d3.select('#map')
         .attr('width', width)
@@ -263,13 +264,17 @@ function plotMap(us) {
         })
         .attr('text-anchor', 'middle')
         .attr('fill', 'black');
-
-    d3.selectAll('#state-path, #state-names').attr('transform', 'scale(1.4)');
 }
 
 function setStateTextBold(s, bold) {
-    d3.select(`#text_${stateAbbr[s]}`)
-        .classed('heavy-font', bold);
+    const el = d3.select(`#path_${stateAbbr[s]}`);
+
+    if (bold) {
+        el.raise().style('stroke', 'black');
+    } else {
+        el.style('stroke', 'white');
+    }
+    d3.select(`#text_${stateAbbr[s]}`).classed('heavy-font', bold);
 }
 
 // Update cholorpleth map for the year
@@ -312,7 +317,7 @@ function updateCandidateInfo(year) {
             .join('text')
             .text(d => d)
             .attr('text-anchor', 'end')
-            .attr('transform', (d, i) => `translate(0, ${30 * i})`)
+            .attr('transform', (d, i) => `translate(0, ${25 * i})`)
             .attr('font-size', '12px')
             .attr('class', 'pointer')
             .on('mouseover', function (e, d) {
@@ -337,26 +342,26 @@ function updateCandidateInfo(year) {
             .text(d => `(${candidates[d].party})`)
             .attr('text-anchor', 'end')
             .attr('font-size', '9px')
-            .attr('transform', (d, i) => `translate(0, ${30 * i})`);
+            .attr('transform', (d, i) => `translate(0, ${25 * i})`);
 
         d3.select('#candInfo .logos')
-            .attr('transform', 'translate(130, 10)')
+            .attr('transform', 'translate(130, 15)')
             .selectAll('image')
             .data(c)
             .join('image')
-            .attr('width', 30)
-            .attr('height', 30)
+            .attr('width', 20)
+            .attr('height', 20)
             .attr('href', d => { if (['DEMOCRAT', 'REPUBLICAN', 'LIBERTARIAN'].includes(candidates[d].party)) return `imgs/${candidates[d].party}.png`; })
-            .attr('transform', (d, i) => `translate(0, ${30 * i})`);
+            .attr('transform', (d, i) => `translate(0, ${25 * i})`);
 
         d3.select('#candInfo .voteBars')
-            .attr('transform', 'translate(170, 20)')
+            .attr('transform', 'translate(170, 22)')
             .selectAll('rect')
             .data(c)
             .join('rect')
             .attr('x', 0)
-            .attr('y', (d, i) => `${30 * i}`)
-            .attr('height', 11)
+            .attr('y', (d, i) => `${25 * i}`)
+            .attr('height', 10)
             .attr('width', d => votesScale(candidates[d].votes))
             .attr('fill', d => barColorScale[candidates[d].party]);
 
@@ -368,7 +373,7 @@ function updateCandidateInfo(year) {
             .attr('class', 'parties-text')
             .text(d => `(${candidates[d].votes.toLocaleString()})`)
             .attr('font-size', '9px')
-            .attr('transform', (d, i) => `translate(${votesScale(candidates[d].votes) + 5}, ${30 * i})`)
+            .attr('transform', (d, i) => `translate(${votesScale(candidates[d].votes) + 5}, ${25 * i})`)
     }
 }
 
@@ -391,7 +396,7 @@ function getAllStatesCandidateWins(cand) { // store this for every party winner
 function plotWinHistory() {
     let titleHt = document.getElementById('title').offsetHeight;
 
-    let margin = { top: 30, right: 30, bottom: 30, left: 150 },
+    let margin = { top: 30, right: 30, bottom: 20, left: 130 },
         width = (window.innerWidth / 2) - margin.left - margin.right,
         //width = 300,
         height = (window.innerHeight - titleHt) - margin.top - margin.bottom;
@@ -443,7 +448,6 @@ function plotWinHistory() {
         .style('fill', d => {
             if (Object.keys(colorScales).includes(d.partySimplified))
                 return colorScales[d.partySimplified](d.votes / d.totalvotes);
-            console.log(d);
             return '#CECECE';
         })
         .style('cursor', 'pointer')
