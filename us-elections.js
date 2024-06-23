@@ -266,6 +266,10 @@ function plotMap(us) {
         .attr('fill', 'black');
 }
 
+function highlightRectangle(d, highlight) {
+    d3.select(`#hm${d.year}-${stateAbbr[d.state]}`).classed('win-highlight', highlight);
+}
+
 function setStateTextBold(s, bold) {
     const el = d3.select(`#path_${stateAbbr[s]}`);
 
@@ -324,12 +328,12 @@ function updateCandidateInfo(year) {
                 // highlight each state where the candidate won over all time
                 candidateWins = getAllStatesCandidateWins(d);
                 candidateWins.forEach(function (win) {
-                    d3.select(`#hm${win.year}-${stateAbbr[win.state]}`).classed('win-highlight', true);
+                    highlightRectangle(win, true);
                 });
             })
             .on('mouseout', function () {
                 candidateWins.forEach(function (win) {
-                    d3.select(`#hm${win.year}-${stateAbbr[win.state]}`).classed('win-highlight', false);
+                    highlightRectangle(win, false);
                 });
             });
 
@@ -467,17 +471,18 @@ function plotWinHistory() {
                 d3.select(`#hm_${stateAbbr[curState]}`).classed('heavy-font', false);
                 curState = d.state;
             }
+            d3.select(this).classed('win-highlight', true);
         })
         .on('mousemove', function (e, d) {
             tooltipMove(e, d.state, d.year);
             document.getElementById('tooltip').style.display = 'block';
             tooltip.style('opacity', 1);
-            setStateTextBold(d.state, true);
         })
         .on('mouseout', function (e, d) {
             document.getElementById('tooltip').style.display = 'none';
             tooltip.style('opacity', 0);
             setStateTextBold(d.state, false);
+            d3.select(this).classed('win-highlight', false);
         });
 
     /* var colorValues1 = [{ color: '#C4CAFF', value: minPartyVotePercent }, { color: '#7381FF', value: maxPartyVotePercent }];
