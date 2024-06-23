@@ -7,7 +7,7 @@ let images;
 let curYear = 2020; // default year
 let curState;
 
-let votesScale = d3.scaleLinear().range([0, 300]);
+let votesScale = d3.scaleLinear().range([0, 250]);
 
 var path = d3.geoPath();
 let usStatesData = 'https://d3js.org/us-10m.v2.json';
