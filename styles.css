@@ -1,0 +1,50 @@
+.states {
+    pointer-events: none;
+}
+
+.bubble, .path, .bar, .bar-labels, .pointer {
+    cursor: pointer;
+}
+
+#title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.8em;
+    font-family: 'Dosis', sans-serif;
+    margin-bottom: 0;
+}
+
+#state {
+    font-weight: 500;
+    font-family: 'Dosis', sans-serif;
+}
+
+.parties-text {
+    fill: gray;
+    font-style: italic;
+}
+
+.win-highlight {
+    border-style: dashed;
+    stroke: black;
+    stroke-width: 0.75px;
+}
+
+.tooltip {
+    background-color: white;
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 10px;
+    display: none;
+    font-size: small;
+}
+
+.heavy-font {
+    font-weight: 700;
+    font-size: 1.3em;
+}
+
+text.states-name {
+    pointer-events: none;
+}
