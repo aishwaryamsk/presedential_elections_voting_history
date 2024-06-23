@@ -471,6 +471,7 @@ function plotWinHistory() {
                 d3.select(`#hm_${stateAbbr[curState]}`).classed('heavy-font', false);
                 curState = d.state;
             }
+            setStateTextBold(d.state, true);
             d3.select(this).classed('win-highlight', true);
         })
         .on('mousemove', function (e, d) {
